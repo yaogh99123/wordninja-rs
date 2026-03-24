@@ -67,7 +67,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
         rust: [stable]
 
     steps:
@@ -90,15 +90,25 @@ jobs:
         name: wordninja-linux
         path: target/release/wordninja-linux
 
-    - name: Build macOS
-      if: matrix.os == 'macOS-latest'
+    - name: Build macOS x86_64
+      if: matrix.os == 'macos-13'
       run: cargo build --release && mv target/release/wordninja target/release/wordninja-macos
-    - name: Upload macOS target
-      if: matrix.os == 'macOS-latest'
+    - name: Upload macOS x86_64 target
+      if: matrix.os == 'macos-13'
       uses: actions/upload-artifact@v2
       with:
         name: wordninja-macos
         path: target/release/wordninja-macos
+
+    - name: Build macOS ARM64 (Apple Silicon / M1-M4)
+      if: matrix.os == 'macos-14'
+      run: cargo build --release && mv target/release/wordninja target/release/wordninja-macos-arm64
+    - name: Upload macOS ARM64 target
+      if: matrix.os == 'macos-14'
+      uses: actions/upload-artifact@v2
+      with:
+        name: wordninja-macos-arm64
+        path: target/release/wordninja-macos-arm64
 
     - name: Build windows
       if: matrix.os == 'windows-latest'
@@ -126,4 +136,5 @@ jobs:
           files: |
             wordninja-linux
             wordninja-macos
+            wordninja-macos-arm64
             wordninja-windows
