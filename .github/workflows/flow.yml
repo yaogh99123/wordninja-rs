@@ -67,7 +67,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
+        os: [ubuntu-latest, windows-latest, macos-13, macos-15]
         rust: [stable]
 
     steps:
@@ -101,10 +101,10 @@ jobs:
         path: target/release/wordninja-macos
 
     - name: Build macOS ARM64 (Apple Silicon / M1-M4)
-      if: matrix.os == 'macos-14'
+      if: matrix.os == 'macos-15'
       run: cargo build --release && mv target/release/wordninja target/release/wordninja-macos-arm64
     - name: Upload macOS ARM64 target
-      if: matrix.os == 'macos-14'
+      if: matrix.os == 'macos-15'
       uses: actions/upload-artifact@v2
       with:
         name: wordninja-macos-arm64
